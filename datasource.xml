@@ -1,0 +1,31 @@
+<datasource jta="false" jndi-name="java:/comp/env/jdbc/seldb" pool-name="eClmDS" enabled="true" use-ccm="false">
+    <connection-url>jdbc:oracle:thin:@192.168.0.166:1521:orcl</connection-url>
+    <driver-class>oracle.jdbc.OracleDriver</driver-class>
+    <driver>oracle</driver>
+    <security>
+    <user-name>username</user-name>
+    <password>password</password>
+    </security>
+    <validation>
+         <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
+         <validate-on-match>true</validate-on-match>
+         <background-validation>true</background-validation>
+         <background-validation-millis>60000</background-validation-millis>
+    </validation>
+    <pool>
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>10</max-pool-size>
+        <prefill>true</prefill>
+        <use-strict-min>false</use-strict-min>
+    </pool>
+    <timeout>
+        <idle-timeout-minutes>30</idle-timeout-minutes>
+    </timeout>
+    <statement>
+        <share-prepared-statements>false</share-prepared-statements>
+    </statement>
+</datasource>
+<drivers>
+    <driver name="oracle" module="oracle.jdbc"/>
+</drivers>
+
