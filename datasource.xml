@@ -1,10 +1,10 @@
 <datasource jta="false" jndi-name="java:/comp/env/jdbc/seldb" pool-name="eClmDS" enabled="true" use-ccm="false">
-    <connection-url>jdbc:oracle:thin:@192.168.0.166:1521:orcl</connection-url>
+    <connection-url>jdbc:oracle:thin:@localhost:1521:XE</connection-url>
     <driver-class>oracle.jdbc.OracleDriver</driver-class>
     <driver>oracle</driver>
     <security>
-    <user-name>username</user-name>
-    <password>password</password>
+    <user-name>eclm</user-name>
+    <password>eclm</password>
     </security>
     <validation>
          <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.oracle.OracleValidConnectionChecker"/>
