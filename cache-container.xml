@@ -1,0 +1,18 @@
+<cache-container name="web" default-cache="sessionscache" module="org.wildfly.clustering.web.infinispan" start="EAGER">
+    <transport cluster="jcorner_cluster" lock-timeout="60000"/>
+    <replicated-cache name="sessionscache" batching="true" mode="SYNC">
+        <eviction max-entries="-1"/>
+        <expiration max-idle="3900000"/>
+    </replicated-cache>
+    <replicated-cache name="eclmreplcache" batching="true" mode="SYNC">
+        <eviction strategy="LRU" max-entries="50000"/>
+        <expiration max-idle="1200000"/>
+    </replicated-cache>
+ 
+    <replicated-cache name="staticreplcache" batching="true" mode="SYNC">
+        <eviction max-entries="-1"/>
+    </replicated-cache>
+    <distributed-cache name="dist" batching="true" mode="ASYNC" owners="4" l1-lifespan="0">
+        <file-store/>
+    </distributed-cache>
+</cache-container>
