@@ -12,8 +12,9 @@ RUN /opt/jboss/wildfly/bin/add-user.sh admin Admin#70365 --silent
 
 #ADD jenkins.war /opt/jboss/wildfly/standalone/deployments/
 
+RUN /opt/jboss/init.sh
+
 EXPOSE 9990
 
 
-CMD /opt/jboss/init.sh; \
-    /opt/jboss/wildfly/bin/standalone.sh --server-config standalone-full-ha.xml -b 0.0.0.0 -bmanagement 0.0.0.0
+CMD /opt/jboss/wildfly/bin/standalone.sh --server-config standalone-full-ha.xml -b 0.0.0.0 -bmanagement 0.0.0.0
