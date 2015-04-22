@@ -1,30 +1,48 @@
 TAG=0.13.2
-DOCKER_HOST := tcp://$(shell boot2docker ip):2376
-DOCKER_CERT_PATH := $(shell echo ~)/.boot2docker/certs/boot2docker-vm
-DOCKER_TLS_VERIFY := 1
-
+_DOCKER_HOST := tcp://$(shell boot2docker ip):2376
+_DOCKER_CERT_PATH := $(shell echo ~)/.boot2docker/certs/boot2docker-vm
+_DOCKER_TLS_VERIFY := 1
+CID := $(shell export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);docker ps -l -q)
+INAME := eclm/wildfly
+CMD :=
 build:
-        docker build --tag=wildfly-eclm .
+	docker build --tag=$(INAME) .
 
 run:
-	export DOCKER_TLS_VERIFY=$(DOCKER_TLS_VERIFY);export DOCKER_HOST=$(DOCKER_HOST);export DOCKER_CERT_PATH=$(DOCKER_CERT_PATH);\
-	docker run -d -p 8080:8080 -p 9990:9990 --link oracle:oracle wildfly-eclm
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker run -d -p 8080:8080 -p 9990:9990 --link oracle:oracle $(INAME)
 
 run-ext:
-export DOCKER_TLS_VERIFY=$(DOCKER_TLS_VERIFY);export DOCKER_HOST=$(DOCKER_HOST);export DOCKER_CERT_PATH=$(DOCKER_CERT_PATH);\
-	docker run -d -p 8080:8080 -p 9990:9990 --name eclm-$(TAG) --link oracle:oracle jboss-eclm-$(TAG)
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker run -d -p 8080:8080 -p 9990:9990 --name eclm-$(TAG) --link oracle:oracle $(INAME):$(TAG) $(CMD)
 
+bash:
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+        docker run -ti -p 8080:8080 -p 9990:9990 --name eclm-$(TAG) --link oracle:oracle $(INAME):$(TAG) /bin/bash
 commit:
-	export DOCKER_TLS_VERIFY=$(DOCKER_TLS_VERIFY);export DOCKER_HOST=$(DOCKER_HOST);export DOCKER_CERT_PATH=$(DOCKER_CERT_PATH);\
-	docker commit 3132192a1260 jboss-eclm-$(TAG)
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker commit $(CID) $(INAME):$(TAG)
+
+stop:
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker stop $(CID)
 
 show:
-	export DOCKER_TLS_VERIFY=$(DOCKER_TLS_VERIFY);export DOCKER_HOST=$(DOCKER_HOST);export DOCKER_CERT_PATH=$(DOCKER_CERT_PATH);\
-	docker ps
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker ps;\
+	docker logs $(CID)
+
+log: 
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker logs -f $(CID)
 
 clean:
-	export DOCKER_TLS_VERIFY=$(DOCKER_TLS_VERIFY);export DOCKER_HOST=$(DOCKER_HOST);export DOCKER_CERT_PATH=$(DOCKER_CERT_PATH);\
-	docker stop jboss-eclm-$(TAG);\
-	docker rm jboss-eclm-$(TAG)
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker stop $(INAME):$(TAG);\
+	docker rm eclm-$(TAG)
 
-all:build,run
+help:
+	@echo wildfly admin console: user:admin pass: Admin#70365
+	@echo when deploy war, runtime name must be 'eclm.war'
+
+all:clean,build,run
