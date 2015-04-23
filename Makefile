@@ -16,6 +16,10 @@ run-ext:
 	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
 	docker run -d -p 8080:8080 -p 9990:9990 --name eclm-$(TAG) --link oracle:oracle $(INAME):$(TAG) $(CMD)
 
+debug:
+	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
+	docker run -d -p 8080:8080 -p 9990:9990 --link oracle:oracle $(INAME) /opt/jboss/wildfly/bin/standalone.sh --debug 8787 --server-config standalone-full-ha.xml -b 0.0.0.0 -bmanagement 0.0.0.0
+
 bash:
 	export DOCKER_TLS_VERIFY=$(_DOCKER_TLS_VERIFY);export DOCKER_HOST=$(_DOCKER_HOST);export DOCKER_CERT_PATH=$(_DOCKER_CERT_PATH);\
         docker run -ti -p 8080:8080 -p 9990:9990 --name eclm-$(TAG) --link oracle:oracle $(INAME):$(TAG) /bin/bash
