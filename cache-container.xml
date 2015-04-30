@@ -14,5 +14,6 @@
     </replicated-cache>
     <distributed-cache name="dist" batching="true" mode="ASYNC" owners="4" l1-lifespan="0">
         <file-store/>
+        <locking acquire-timeout="45000"/>  
     </distributed-cache>
 </cache-container>
