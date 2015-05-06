@@ -3,7 +3,7 @@ if [ "x$JDBCURL" = "x" ]; then
 fi
 
 #remove all comments
-sed -i.bak 's/<!--.*-->//' opt/jboss/datasource.xml
+sed -i.bak 's/<!--.*-->//' /opt/jboss/wildfly/standalone/configuration/standalone-full-ha.xml
 
 
 sed -i.bak "s/<connection-url>.*<\/connection-url>/<connection-url>$JDBCURL<\/connection-url>/" /opt/jboss/datasource.xml
