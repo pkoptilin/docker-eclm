@@ -54,3 +54,5 @@ run-ext:
 debug:
 	$(DOCKERC) run -d $(PORTS) $(LINK) $(INAME) /opt/jboss/wildfly/bin/standalone.sh --debug 8787 --server-config standalone-full-ha.xml -b 0.0.0.0 -bmanagement 0.0.0.0
 
+jbosslog:
+	$(DOCKERC) exec $(CID) tail -f -n 100 wildfly/standalone/log/server.log
