@@ -7,11 +7,7 @@ COPY init.sh /opt/jboss/init.sh
 COPY datasource.xml /opt/jboss/datasource.xml
 COPY cache-container.xml /opt/jboss/cache-container.xml
 
-RUN /opt/jboss/wildfly/bin/add-user.sh admin Admin#70365 --silent
-
-#COPY *.war /opt/jboss/wildfly/standalone/deployments/
-
-RUN /opt/jboss/init.sh
+RUN /opt/jboss/wildfly/bin/add-user.sh admin Admin#70365 --silent && /opt/jboss/init.sh
 
 EXPOSE 9990
 
